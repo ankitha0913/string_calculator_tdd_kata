@@ -5,6 +5,7 @@ void main() {
   testCommaSeparated();
   testCommaAndNewLineSeparated();
   testCustomDelimiter();
+  testNegativeNumbers();
 }
 
 void testCommaSeparated(){
@@ -63,6 +64,22 @@ void testCustomDelimiter() {
 
     test('custom delimiter same as default (",")', () {
       expect(add('//,\n1,2,3'), equals(6));
+    });
+  });
+}
+
+void testNegativeNumbers() {
+  group('negative numbers handling', () {
+    test('throws when a single negative number is present', () {
+      expect(() => add('1,-2,3'), throwsA(predicate((e) =>
+      e is Exception && e.toString() == 'Exception: negative numbers not allowed -2'
+      )));
+    });
+
+    test('throws and lists all negative numbers', () {
+      expect(() => add('-1,-2,3,-4'), throwsA(predicate((e) =>
+      e is Exception && e.toString() == 'Exception: negative numbers not allowed -1,-2,-4'
+      )));
     });
   });
 }

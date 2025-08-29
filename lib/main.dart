@@ -1,5 +1,5 @@
 void main(){
-   print(add("0"));
+   print(add("//,\n0,-9,8,-1"));
 }
 
 int add(String numbers){
@@ -16,9 +16,14 @@ int add(String numbers){
     numbers = numbers.substring(match.end);
   }
 
-  return numbers
-      .split(delimiterPattern)
-      .map(int.parse)
+  final parsedNumbers = numbers.split(delimiterPattern).map(int.parse).toList();
+
+  final negatives = parsedNumbers.where((n) => n < 0).toList();
+  if (negatives.isNotEmpty) {
+    throw Exception('negative numbers not allowed ${negatives.join(',')}');
+  }
+
+  return parsedNumbers
       .reduce((a, b) => a + b);
 
 }
