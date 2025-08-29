@@ -1,5 +1,5 @@
 void main(){
-   print(add("//,\n0,-9,8,-1"));
+   add("//,\n0,-9,8,-1");
 }
 
 int add(String numbers){
@@ -7,14 +7,27 @@ int add(String numbers){
     return 0;
   }
 
-  RegExp multiDelimiterPattern = RegExp(r'^//\[(.+)\]\n');
+  final multipleDelimitersPattern = RegExp(r'^//(\[.*?\])+\n');
   RegExp singleDelimiterPattern = RegExp(r'^//(.)\n');
   RegExp delimiterPattern = RegExp(r'[,\n]');
 
-  RegExpMatch? match; //Following DRY principle here
-  if ((match = multiDelimiterPattern.firstMatch(numbers)) != null ||
-      (match = singleDelimiterPattern.firstMatch(numbers)) != null) {
-    final delimiter = RegExp.escape(match!.group(1)!);
+  if (multipleDelimitersPattern.hasMatch(numbers)) {
+    final match = multipleDelimitersPattern.firstMatch(numbers)!;
+    final delimiterSection = match.group(0)!;
+
+    // Extract all delimiters inside brackets
+    final delimiterRegex = RegExp(r'\[(.*?)\]');
+    final delimiters = delimiterRegex
+        .allMatches(delimiterSection)
+        .map((m) => RegExp.escape(m.group(1)!))
+        .toList();
+
+    // Combine delimiters into one regex pattern
+    delimiterPattern = RegExp(delimiters.join('|'));
+    numbers = numbers.substring(match.end);
+  } else if (singleDelimiterPattern.hasMatch(numbers)) {
+    final match = singleDelimiterPattern.firstMatch(numbers)!;
+    final delimiter = RegExp.escape(match.group(1)!);
     delimiterPattern = RegExp(delimiter);
     numbers = numbers.substring(match.end);
   }

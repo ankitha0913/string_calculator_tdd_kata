@@ -8,6 +8,7 @@ void main() {
   testNegativeNumbers();
   testWithNumbersGreaterThanThousand();
   testMultiCharacterDelimiters();
+  testMultipleDelimiters();
 }
 
 void testCommaSeparated(){
@@ -117,6 +118,31 @@ void testMultiCharacterDelimiters() {
 
     test('throws on negative numbers with multi-char delimiter', () {
       expect(() => add('//[***]\n1***-2***3'), throwsA(
+        predicate((e) =>
+        e is Exception &&
+            e.toString() == 'Exception: negative numbers not allowed -2'
+        ),
+      ));
+    });
+  });
+}
+
+void testMultipleDelimiters() {
+  group('multiple delimiters', () {
+    test('handles multiple single-char delimiters', () {
+      expect(add('//[*][%]\n1*2%3'), equals(6));
+    });
+
+    test('handles multiple delimiters of varying lengths', () {
+      expect(add('//[***][#][%]\n1***2#3%4'), equals(10));
+    });
+
+    test('ignores numbers > 1000 with multiple delimiters', () {
+      expect(add('//[*][%]\n2*1001%3'), equals(5));
+    });
+
+    test('throws on negative numbers with multiple delimiters', () {
+      expect(() => add('//[*][%]\n1*-2%3'), throwsA(
         predicate((e) =>
         e is Exception &&
             e.toString() == 'Exception: negative numbers not allowed -2'
