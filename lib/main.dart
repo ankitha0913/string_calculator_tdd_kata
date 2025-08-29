@@ -16,7 +16,7 @@ int add(String numbers){
     numbers = numbers.substring(match.end);
   }
 
-  final parsedNumbers = numbers.split(delimiterPattern).map(int.parse).toList();
+  final parsedNumbers = numbers.split(delimiterPattern).map(int.parse).toList().where((n) => n <= 1000);
 
   final negatives = parsedNumbers.where((n) => n < 0).toList();
   if (negatives.isNotEmpty) {

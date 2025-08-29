@@ -6,6 +6,7 @@ void main() {
   testCommaAndNewLineSeparated();
   testCustomDelimiter();
   testNegativeNumbers();
+  testWithNumbersGreaterThanThousand();
 }
 
 void testCommaSeparated(){
@@ -86,6 +87,15 @@ void testNegativeNumbers() {
       expect(() => add('//+\n10+-20+30'), throwsA(predicate((e) =>
       e is Exception && e.toString() == 'Exception: negative numbers not allowed -20'
       )));
+    });
+  });
+}
+
+
+void testWithNumbersGreaterThanThousand() {
+  group('add with numbers greater than 1000', (){
+    test('handles with custom delimiter ";"', () {
+      expect(add('//;\n1;1001;3'), equals(4));
     });
   });
 }
