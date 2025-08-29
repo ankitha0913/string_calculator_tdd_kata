@@ -4,6 +4,7 @@ import 'package:test/test.dart';
 void main() {
   testCommaSeparated();
   testCommaAndNewLineSeparated();
+  testCustomDelimiter();
 }
 
 void testCommaSeparated(){
@@ -34,6 +35,34 @@ void testCommaAndNewLineSeparated(){
 
     test('handles mixed comma and newline delimiters', () {
       expect(add('1\n2,3'), equals(6));
+    });
+  });
+}
+
+void testCustomDelimiter() {
+  group('add with custom delimiter', () {
+    test('handles custom delimiter ";"', () {
+      expect(add('//;\n1;2;3'), equals(6));
+    });
+
+    test('handles custom delimiter "#"', () {
+      expect(add('//#\n4#5#6'), equals(15));
+    });
+
+    test('handles custom delimiter "."', () {
+      expect(add('//.\n1.2.3'), equals(6));
+    });
+
+    test('handles custom delimiter "*"', () {
+      expect(add('//*\n2*3*4'), equals(9));
+    });
+
+    test('handles custom delimiter "-"', () {
+      expect(add('//-\n10-20-30'), equals(60));
+    });
+
+    test('custom delimiter same as default (",")', () {
+      expect(add('//,\n1,2,3'), equals(6));
     });
   });
 }
