@@ -81,5 +81,11 @@ void testNegativeNumbers() {
       e is Exception && e.toString() == 'Exception: negative numbers not allowed -1,-2,-4'
       )));
     });
+
+    test('negative numbers with custom delimiter', () {
+      expect(() => add('//+\n10+-20+30'), throwsA(predicate((e) =>
+      e is Exception && e.toString() == 'Exception: negative numbers not allowed -20'
+      )));
+    });
   });
 }
