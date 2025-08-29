@@ -7,12 +7,15 @@ int add(String numbers){
     return 0;
   }
 
-  RegExp customDelimiterPattern = RegExp(r'^//(.)\n');
+  RegExp multiDelimiterPattern = RegExp(r'^//\[(.+)\]\n');
+  RegExp singleDelimiterPattern = RegExp(r'^//(.)\n');
   RegExp delimiterPattern = RegExp(r'[,\n]');
 
-  if (customDelimiterPattern.hasMatch(numbers)) {
-    final match = customDelimiterPattern.firstMatch(numbers);
-    delimiterPattern = RegExp(RegExp.escape(match!.group(1)!));
+  RegExpMatch? match; //Following DRY principle here
+  if ((match = multiDelimiterPattern.firstMatch(numbers)) != null ||
+      (match = singleDelimiterPattern.firstMatch(numbers)) != null) {
+    final delimiter = RegExp.escape(match!.group(1)!);
+    delimiterPattern = RegExp(delimiter);
     numbers = numbers.substring(match.end);
   }
 
